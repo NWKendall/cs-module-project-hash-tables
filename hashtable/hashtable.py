@@ -23,6 +23,13 @@ class HashTable:
     def __init__(self, capacity):
         # Your code here
 
+        ## how many indexes
+        self.capacity = capacity
+        # currently utilized slots
+        self.size = 0
+        # data structure (array length of capacity populated with default values)
+        self.buckets = [None] * self.capacity
+
 
     def get_num_slots(self):
         """
@@ -35,6 +42,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        return self.capacity
 
 
     def get_load_factor(self):
@@ -63,6 +71,13 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        # https://gist.github.com/mengzhuo/180cd6be8ba9e2743753
+        hash = 5381
+
+        for x in key:
+            hash = (( hash << 5) + hash) + ord(x)
+        return hash & 0xFFFFFFFFF
+
 
 
     def hash_index(self, key):
@@ -82,6 +97,13 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # generate hash based on key
+        slot = self.hash_index(key)
+        # increase size += 1
+        self.size += 1
+        # input value into buckets
+        self.buckets[slot] = HashTableEntry(key,value)
+
 
 
     def delete(self, key):
@@ -93,6 +115,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        
 
 
     def get(self, key):
@@ -104,6 +127,13 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        slot = self.hash_index(key)
+        hash_entry = self.buckets[slot]
+
+        if hash_entry is not None:
+            return hash_entry.value
+
+        return None
 
 
     def resize(self, new_capacity):
@@ -151,3 +181,5 @@ if __name__ == "__main__":
         print(ht.get(f"line_{i}"))
 
     print("")
+
+# print("num slots:", ht.get_num_slots())
