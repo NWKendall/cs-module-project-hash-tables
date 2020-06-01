@@ -115,6 +115,9 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        self.size -= 1
+
+        self.put(key, None)
         
 
 
