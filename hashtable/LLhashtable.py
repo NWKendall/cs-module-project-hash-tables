@@ -1,4 +1,4 @@
-class HashTableEntry:
+class Node:
     """
     Linked List hash table key/value pair
     """
@@ -112,12 +112,25 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        # generate hash based on key
-        slot = self.hash_index(key)
         # increase size += 1
         self.size += 1
+        
+        # generate hash based on key
+        slot = self.hash_index(key)
+
         # input value into buckets
-        self.buckets[slot] = HashTableEntry(key,value)
+        node = self.buckets[slot]
+        if node is None:
+            self.buckets[slot] = Node(key,value)
+            return
+        
+        prev = node
+        while node is not None:
+            if node.key is key:
+                node.value = value
+            prev = node
+            node = node.next
+        prev.next = Node(key, value)
 
 
 
@@ -133,8 +146,30 @@ class HashTable:
         # reduce size of data 
         self.size -= 1
         # replace data at that key entry with default value (None)
-        self.put(key, None)
-        # calling del method will mutate the structure, no bueno
+        
+        # 1. Compute hash
+        slot = self.hash_index(key)
+        node = self.buckets[slot]
+        prev = None
+		# 2. Iterate to the requested node
+        while node is not None and node.key is not key:
+            prev = node
+            node = node.next
+		# Now, node is either the requested node or none
+        if node is None:
+            # 3. Key not found
+            return None
+        else:
+            # 4. The key was found.
+            self.size -= 1
+            result = node.value
+            # Delete this element in linked list
+            if prev is None:
+                self.buckets[slot] = node.next # May be None, or the next match
+            else:
+                prev.next = prev.next.next # LinkedList delete by skipping over
+            # Return the deleted result 
+            return result
         
 
     def get(self, key):
@@ -147,12 +182,16 @@ class HashTable:
         """
         # Your code here
         slot = self.hash_index(key)
-        hash_entry = self.buckets[slot]
+        node = self.buckets[slot]
 
-        if hash_entry is not None:
-            return hash_entry.value
+        while node is not None and node.key is not key:
+            node = node.next
 
-        return None
+        if node is None:
+            return None
+        
+        else:
+            return node.value
 
 
     def resize(self, new_capacity):

@@ -1,6 +1,6 @@
 import unittest
 
-from hashtable import HashTable
+from LLhashtable import HashTable
 
 
 class TestHashTable(unittest.TestCase):
