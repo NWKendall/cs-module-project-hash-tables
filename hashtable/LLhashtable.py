@@ -120,16 +120,23 @@ class HashTable:
 
         # input value into buckets
         node = self.buckets[slot]
+
+        # control for empty slot
         if node is None:
             self.buckets[slot] = Node(key,value)
             return
         
+        # setting anoth var to be equal to node
         prev = node
+        # iterate through LL
         while node is not None:
+            # overwrite node value if keys match
             if node.key is key:
                 node.value = value
-            prev = node
-            node = node.next
+            else:
+                prev = node
+                node = node.next
+        # else add a new node linked to tail's next
         prev.next = Node(key, value)
 
 
