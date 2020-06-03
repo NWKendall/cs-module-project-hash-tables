@@ -106,31 +106,35 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        # increase size += 1
-        self.size += 1
-
+        if self.get_load_factor() > 0.7:
+            self.resize(self.capacity * 2)
+            self.put(key, value)
         # generate hash based on key
-        slot = self.hash_index(key)
+        else: 
+            slot = self.hash_index(key)
 
-        # input value into buckets
-        node = self.buckets[slot]
+            # input value into buckets
+            node = self.buckets[slot]
 
-        # control for empty slot
-        if node is None:
-            self.buckets[slot] = Node(key, value)
-            return
+            # control for empty slot
+            if node is None:
+                self.buckets[slot] = Node(key, value)
+                # increase size += 1
+                self.size += 1
+                return
 
-        # setting anoth var to be equal to node
-        prev = node
-        # iterate through LL
-        while node is not None:
-            # overwrite node value if keys match
-            if node.key is key:
-                node.value = value
+            # setting anoth var to be equal to node
             prev = node
-            node = node.next
-        # else add a new node linked to tail's next
-        prev.next = Node(key, value)
+            # iterate through LL
+            while node is not None:
+                # overwrite node value if keys match
+                if node.key is key:
+                    node.value = value
+                prev = node
+                node = node.next
+            # else add a new node linked to tail's next
+            prev.next = Node(key, value)
+            self.size += 1
 
     def delete(self, key):
         """
@@ -205,23 +209,21 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        # criteria for increasing buckets
-        if self.get_load_factor() > 0.7:
-            # new array for buckets to be placed
-            # does this need to be declared before rehashing?
-            self.capacity = new_capacity
-            new_buckets = [None] * self.capacity
-            # iterate through array
-            for node_index in range(len(self.buckets)):
-                cur = self.buckets[node_index]
-                while cur is not None:
-                    new_hash = self.hash_index(cur.key)
-                    new_buckets[node_index] = Node(new_hash, cur.value)
-                    cur = cur.next
-                # new_hash = self.djb2(bucket.key) % (self.capacity*2)
-
-            return new_buckets
-
+        # stores existing LLs in a var
+        old_buckets = self.buckets
+        # update capacity to new capacity
+        self.capacity = new_capacity
+        # rezized arr for LLs to be placed
+        self.buckets = [None] * self.capacity
+        # iterate through OLD array (as new arr contains None)
+        for node_index in old_buckets:
+            # store LL head in var for LL traversal
+            cur = node_index
+            while cur is not None:
+                # for each node in LL, add to buckets (which has been readjusted)
+                self.put(cur.key, cur.value)
+                # traverse each node to repeat
+                cur = cur.next
 
 
 if __name__ == "__main__":
