@@ -110,7 +110,7 @@ class HashTable:
             self.resize(self.capacity * 2)
             self.put(key, value)
         # generate hash based on key
-        else: 
+        else:
             slot = self.hash_index(key)
 
             # input value into buckets
@@ -145,37 +145,42 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        # reduce size of data
-        self.size -= 1
         # replace data at that key entry with default value (None)
-
-        # generate hash based on key
-        slot = self.hash_index(key)
-        node = self.buckets[slot]
-        prev = None
-
-        # Iterate to the requested node
-        while node is not None and node.key is not key:
-            prev = node
-            node = node.next
-            # control for none
-        if node is None:
-            # return none
-            return None
-        else:
-            # key match occurred
-            # decrement size
-            self.size -= 1
-            # store value to return
-            result = node.value
-            # Delete this element in linked list
-            if prev is None:
-                self.buckets[slot] = node.next
+        if self.get_load_factor() < 0.2:
+            if self.capacity / 2 < 8:
+                self.resize(8)
+                self.delete(key)
             else:
-                # LinkedList delete by skipping over
-                prev.next = prev.next.next
-            # Return the deleted result
-            return result
+                self.resize(self.capacity / 2)
+                self.delete(key)
+        else:
+            # generate hash based on key
+            slot = self.hash_index(key)
+            node = self.buckets[slot]
+            prev = None
+
+            # Iterate to the requested node
+            while node is not None and node.key is not key:
+                prev = node
+                node = node.next
+                # control for none
+            if node is None:
+                # return none
+                return None
+            else:
+                # key match occurred
+                # decrement size
+                self.size -= 1
+                # store value to return
+                result = node.value
+                # Delete this element in linked list
+                if prev is None:
+                    self.buckets[slot] = node.next
+                else:
+                    # LinkedList delete by skipping over
+                    prev.next = prev.next.next
+                # Return the deleted result
+                return result
 
     def get(self, key):
         """

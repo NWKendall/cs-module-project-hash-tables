@@ -57,8 +57,8 @@ doubling.
 You can test this with both of:
 
 ```
-python test_hashtable.py
-python test_hashtable_resize.py
+python test_hashtable.py ✅
+python test_hashtable_resize.py ✅
 ```
 
 Stretch: When load factor decreases below `0.2`, automatically rehash
