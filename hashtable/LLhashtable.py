@@ -134,7 +134,6 @@ class HashTable:
                 node = node.next
             # else add a new node linked to tail's next
             prev.next = Node(key, value)
-            self.size += 1
 
     def delete(self, key):
         """
@@ -151,7 +150,7 @@ class HashTable:
                 self.resize(8)
                 self.delete(key)
             else:
-                self.resize(self.capacity / 2)
+                self.resize(int(round(self.capacity / 2, 0)))
                 self.delete(key)
         else:
             # generate hash based on key
@@ -214,6 +213,9 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        print("RESIZE", new_capacity)
+        # if resizing, size with current bucket array needs to be reset
+        self.size = 0
         # stores existing LLs in a var
         old_buckets = self.buckets
         # update capacity to new capacity
@@ -232,8 +234,8 @@ class HashTable:
 
 
 if __name__ == "__main__":
-    ht = HashTable(8)
-
+    ht = HashTable(800)
+    print("num slots:", ht.get_num_slots())
     ht.put("line_1", "'Twas brillig, and the slithy toves")
     ht.put("line_2", "Did gyre and gimble in the wabe:")
     ht.put("line_3", "All mimsy were the borogoves,")
@@ -246,27 +248,35 @@ if __name__ == "__main__":
     ht.put("line_10", "Long time the manxome foe he sought--")
     ht.put("line_11", "So rested he by the Tumtum tree")
     ht.put("line_12", "And stood awhile in thought.")
+    # ht.delete("line_12")
+    # ht.delete("line_11")
+
 
     print("")
+    print("num slots:", ht.get_num_slots())
+    print("new size", ht.size)
 
     # Test storing beyond capacity
-    for i in range(1, 13):
-        print(ht.get(f"line_{i}"))
+    # for i in range(1, 13):
+    #     print(ht.get(f"line_{i}"))
 
     # Test resizing
-    old_capacity = ht.get_num_slots()
-    ht.resize(ht.capacity * 2)
-    new_capacity = ht.get_num_slots()
+    # old_capacity = ht.get_num_slots()
+    # ht.resize(ht.capacity * 2)
+    # new_capacity = ht.get_num_slots()
 
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
     # Test if data intact after resizing
-    for i in range(1, 13):
-        print(ht.get(f"line_{i}"))
+    # for i in range(1, 13):
+    #     print(ht.get(f"line_{i}"))
 
     print("")
+    print("num slots:", ht.get_num_slots())
+    print("Load Factor:", ht.get_load_factor())
+    # print("num slots:", ht.resize(13))
+    print("new size", ht.size)
+    print("num slots:", ht.get_num_slots())
+    print("new size", ht.size)
+    print("Load Factor:", ht.get_load_factor())
 
-# print("num slots:", ht.get_num_slots())
-# print("Load Factor:", ht.get_load_factor())
-# print("num slots:", ht.resize(13))
-# print("new size", ht.size)
