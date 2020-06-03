@@ -2,6 +2,7 @@ class Node:
     """
     Linked List hash table key/value pair
     """
+
     def __init__(self, key, value):
         self.key = key
         self.value = value
@@ -23,13 +24,12 @@ class HashTable:
     def __init__(self, capacity):
         # Your code here
 
-        ## how many indexes
+        # how many indexes
         self.capacity = capacity
         # currently utilized slots
         self.size = 0
         # data structure (array length of capacity populated with default values)
         self.buckets = [None] * self.capacity
-
 
     def get_num_slots(self):
         """
@@ -44,7 +44,6 @@ class HashTable:
         # Your code here
         return self.capacity
 
-
     def get_load_factor(self):
         """
         Return the load factor for this hash table.
@@ -52,7 +51,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        return self.size / self.get_num_slots()
 
     def fnv1(self, key):
         """
@@ -65,19 +64,16 @@ class HashTable:
         """
         Returns: The FNV-1 hash of a given string. 
         """
-        #Constants
+        # Constants
         # FNV_prime = 1099511628211
         # offset_basis = 14695981039346656037
 
-        #FNV-1a Hash Function
+        # FNV-1a Hash Function
         # hash = offset_basis + seed
         # for char in string:
         #     hash = hash * FNV_prime
         #     hash = hash ^ ord(char)
         # return hash
-
-
-
 
     def djb2(self, key):
         """
@@ -90,17 +86,15 @@ class HashTable:
         hash = 5381
 
         for x in key:
-            hash = (( hash << 5) + hash) + ord(x)
+            hash = ((hash << 5) + hash) + ord(x)
         return hash & 0xFFFFFFFFF
-
-
 
     def hash_index(self, key):
         """
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        #return self.fnv1(key) % self.capacity
+        # return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
 
     def put(self, key, value):
@@ -114,7 +108,7 @@ class HashTable:
         # Your code here
         # increase size += 1
         self.size += 1
-        
+
         # generate hash based on key
         slot = self.hash_index(key)
 
@@ -123,9 +117,9 @@ class HashTable:
 
         # control for empty slot
         if node is None:
-            self.buckets[slot] = Node(key,value)
+            self.buckets[slot] = Node(key, value)
             return
-        
+
         # setting anoth var to be equal to node
         prev = node
         # iterate through LL
@@ -133,13 +127,10 @@ class HashTable:
             # overwrite node value if keys match
             if node.key is key:
                 node.value = value
-            else:
-                prev = node
-                node = node.next
+            prev = node
+            node = node.next
         # else add a new node linked to tail's next
         prev.next = Node(key, value)
-
-
 
     def delete(self, key):
         """
@@ -150,34 +141,37 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        # reduce size of data 
+        # reduce size of data
         self.size -= 1
         # replace data at that key entry with default value (None)
-        
-        # 1. Compute hash
+
+        # generate hash based on key
         slot = self.hash_index(key)
         node = self.buckets[slot]
         prev = None
-		# 2. Iterate to the requested node
+
+        # Iterate to the requested node
         while node is not None and node.key is not key:
             prev = node
             node = node.next
-		# Now, node is either the requested node or none
+            # control for none
         if node is None:
-            # 3. Key not found
+            # return none
             return None
         else:
-            # 4. The key was found.
+            # key match occurred
+            # decrement size
             self.size -= 1
+            # store value to return
             result = node.value
             # Delete this element in linked list
             if prev is None:
-                self.buckets[slot] = node.next # May be None, or the next match
+                self.buckets[slot] = node.next
             else:
-                prev.next = prev.next.next # LinkedList delete by skipping over
-            # Return the deleted result 
+                # LinkedList delete by skipping over
+                prev.next = prev.next.next
+            # Return the deleted result
             return result
-        
 
     def get(self, key):
         """
@@ -188,18 +182,20 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        slot = self.hash_index(key)
-        node = self.buckets[slot]
 
+        # generate hash value
+        slot = self.hash_index(key)
+        # store in variable
+        node = self.buckets[slot]
+        # iterate through LL
         while node is not None and node.key is not key:
             node = node.next
-
+        # return none if no key match / 404
         if node is None:
             return None
-        
+        # if key does match, return the node value at that location
         else:
             return node.value
-
 
     def resize(self, new_capacity):
         """
@@ -209,6 +205,22 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # criteria for increasing buckets
+        if self.get_load_factor() > 0.7:
+            # new array for buckets to be placed
+            # does this need to be declared before rehashing?
+            self.capacity = new_capacity
+            new_buckets = [None] * self.capacity
+            # iterate through array
+            for node_index in range(len(self.buckets)):
+                cur = self.buckets[node_index]
+                while cur is not None:
+                    new_hash = self.hash_index(cur.key)
+                    new_buckets[node_index] = Node(new_hash, cur.value)
+                    cur = cur.next
+                # new_hash = self.djb2(bucket.key) % (self.capacity*2)
+
+            return new_buckets
 
 
 
@@ -248,3 +260,6 @@ if __name__ == "__main__":
     print("")
 
 # print("num slots:", ht.get_num_slots())
+# print("Load Factor:", ht.get_load_factor())
+# print("num slots:", ht.resize(13))
+# print("new size", ht.size)
