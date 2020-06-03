@@ -92,3 +92,5 @@ new, resized array.
       Put it there
 Automatically do this when the hash table is overloaded, or underloaded
 (stretch).
+
+- python allows any mutable type of tdata to be used in a key
