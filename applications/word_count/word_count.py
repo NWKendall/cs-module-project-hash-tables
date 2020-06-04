@@ -1,5 +1,30 @@
+import re
+
 def word_count(s):
     # Your code here
+    tally = {}
+    regex = ['"', ':', ';', ',', '.', '-', '+', '=', '/', '\\', '|', '[', ']', '{', '}', '(', ')', '*', '^', '&']
+
+    new_str_arr = []
+
+    for c in s:
+    # filter special characters
+        if c in regex:
+            c == ""
+        else:
+            new_str_arr.append(c)
+
+    # other characters to lowercase
+    new_str = "".join(new_str_arr).lower()
+    
+    # split sting into array
+    for word in new_str.split():
+        if word in tally:
+            tally[word.lower()] += 1
+        else:
+            tally[word.lower()] = 1
+
+    return tally
 
 
 

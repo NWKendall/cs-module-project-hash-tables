@@ -213,7 +213,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        print("RESIZE", new_capacity)
+        # print("RESIZE", new_capacity)
         # if resizing, size with current bucket array needs to be reset
         self.size = 0
         # stores existing LLs in a var
@@ -248,8 +248,8 @@ if __name__ == "__main__":
     ht.put("line_10", "Long time the manxome foe he sought--")
     ht.put("line_11", "So rested he by the Tumtum tree")
     ht.put("line_12", "And stood awhile in thought.")
-    # ht.delete("line_12")
-    # ht.delete("line_11")
+    ht.delete("line_12")
+    ht.delete("line_11")
 
 
     print("")
