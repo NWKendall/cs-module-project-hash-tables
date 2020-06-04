@@ -26,8 +26,8 @@ for word in new_text.split():
         word_count[word.lower()] += "#"
     else:
         word_count[word.lower()] = "#"
-# sort by frequency
-# sort alphabetically
+# sort alphabetically (secondary)
+# sort by frequency (primary)
 dict_sort = sorted(word_count.items(),key=itemgetter(0))
 for x in sorted(dict_sort, key = lambda t: t[1], reverse = True):
     print(f"{x[0]:15} {x[1]}")

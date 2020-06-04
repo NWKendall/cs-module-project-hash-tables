@@ -78,7 +78,7 @@ full-featured.)
 * [Word Count](applications/word_count/) ✅
 * [No Duplicates](applications/no_dups/) ✅
 * [Markov Chains](applications/markov/) ✅
-* [Histogram](applications/histo/)
+* [Histogram](applications/histo/) ✅
 * [Cracking Caesar Ciphers](applications/crack_caesar/)
 * [Sum and Difference](applications/sumdiff/)
 
