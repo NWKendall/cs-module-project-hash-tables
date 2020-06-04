@@ -19,8 +19,10 @@ def word_count(s):
     
     # split sting into array
     for word in new_str.split():
+    # if key exists
         if word in tally:
             tally[word.lower()] += 1
+    # else create key and assign one count
         else:
             tally[word.lower()] = 1
 
